@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package tensegrity.v1.feedback;
+
+option csharp_namespace = "Tensegrity.V1.Feedback";
+
+import "tensegrity/v1/common.proto";
+
+message FeedbackEvent {
+  string event_id = 1;
+  string session_id = 2;
+  string app_instance_id = 3;
+  string model_id = 4;
+  int32 rating = 5;
+  string comment = 6;
+  tensegrity.v1.common.ConfidentialityLevel level = 7;
+  repeated tensegrity.v1.common.EvidenceRef evidence = 8;
+}
+
+message FeedbackAck {
+  string event_id = 1;
+  bool accepted = 2;
+  string reason = 3;
+}
+
+service FeedbackService {
+  rpc SubmitFeedback(FeedbackEvent) returns (FeedbackAck);
+}

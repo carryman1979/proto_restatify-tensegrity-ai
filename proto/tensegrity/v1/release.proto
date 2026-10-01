@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package tensegrity.v1.release;
+
+option csharp_namespace = "Tensegrity.V1.Release";
+
+message UpdateRequest {
+  string device_id = 1;
+  string current_version = 2;
+  repeated string known_slot_ids = 3;
+}
+
+message SlotDelta {
+  string slot_id = 1;
+  string version = 2;
+  bytes payload = 3;
+  string hash = 4;
+}
+
+message ReleaseBundle {
+  string release_id = 1;
+  string version = 2;
+  repeated SlotDelta slot_deltas = 3;
+  bytes manifest = 4;
+  bytes signature = 5;
+}
+
+message UpdateAck {
+  string release_id = 1;
+  bool accepted = 2;
+  string reason = 3;
+}
+
+service ReleaseService {
+  rpc RequestUpdate(UpdateRequest) returns (ReleaseBundle);
+  rpc ApplyRelease(ReleaseBundle) returns (UpdateAck);
+}

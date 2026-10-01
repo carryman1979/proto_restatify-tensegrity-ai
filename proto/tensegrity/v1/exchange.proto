@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package tensegrity.v1.exchange;
+
+option csharp_namespace = "Tensegrity.V1.Exchange";
+
+import "google/protobuf/timestamp.proto";
+
+message ExchangeRequest {
+  string hive_id = 1;
+  repeated string slot_ids = 2;
+  bool include_metadata = 3;
+}
+
+message ExchangePackage {
+  string package_id = 1;
+  string origin_hive_id = 2;
+  string target_hive_id = 3;
+  repeated string slot_ids = 4;
+  bytes payload = 5;
+  bool encrypted = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message ImportAck {
+  string package_id = 1;
+  bool accepted = 2;
+  string message = 3;
+}
+
+service ExchangeService {
+  rpc ExportPackage(ExchangeRequest) returns (ExchangePackage);
+  rpc ImportPackage(ExchangePackage) returns (ImportAck);
+}

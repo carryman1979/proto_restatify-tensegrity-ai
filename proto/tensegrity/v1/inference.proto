@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package tensegrity.v1.inference;
+
+option csharp_namespace = "Tensegrity.V1.Inference";
+
+import "google/protobuf/timestamp.proto";
+import "tensegrity/v1/common.proto";
+
+message GenerateRequest {
+  string request_id = 1;
+  string session_id = 2;
+  string prompt = 3;
+  bool stream = 4;
+  repeated string expert_slot_ids = 5;
+  tensegrity.v1.common.ConfidentialityLevel max_level = 6;
+}
+
+message GenerateResponse {
+  string request_id = 1;
+  string model_id = 2;
+  string text = 3;
+  string selected_expert = 4;
+  google.protobuf.Timestamp generated_at = 5;
+}
+
+service InferenceService {
+  rpc Generate(GenerateRequest) returns (GenerateResponse);
+  rpc StreamGenerate(GenerateRequest) returns (stream GenerateResponse);
+}

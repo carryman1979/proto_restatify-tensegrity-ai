@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package tensegrity.v1.admin;
+
+option csharp_namespace = "Tensegrity.V1.Admin";
+
+message TrustPolicy {
+  string app_instance_id = 1;
+  float trust_score = 2;
+  bool enabled = 3;
+  string reason = 4;
+}
+
+message SlotRegistration {
+  string slot_id = 1;
+  string category_id = 2;
+  string owner = 3;
+  bool allow_distribution = 4;
+  string policy_hash = 5;
+}
+
+message AdminAck {
+  bool ok = 1;
+  string message = 2;
+}
+
+service AdminService {
+  rpc SetTrust(TrustPolicy) returns (AdminAck);
+  rpc RegisterSlot(SlotRegistration) returns (AdminAck);
+}
